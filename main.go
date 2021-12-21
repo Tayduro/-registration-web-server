@@ -29,7 +29,7 @@ func hello(w http.ResponseWriter, r *http.Request) {
         		fmt.Printf("Last Name = %s\n", Lname)
         		fmt.Printf("Email = %s\n", email)
         		fmt.Printf("password = %s\n", password)
-		// http.ServeFile(w, r, "./confirmedRegistration.html")
+		 http.ServeFile(w, r, "./confirmedRegistration.html")
 	default:
 		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
 	}
