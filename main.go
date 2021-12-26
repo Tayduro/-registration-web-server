@@ -5,7 +5,16 @@ import (
 	"log"
 	"net/http"
 	"io/ioutil"
+	"encoding/json"
+	"regexp"
 )
+
+type User struct {
+	FirstName  string
+	LastName string
+	Email   string
+	Password  string
+}
 
 func login(w http.ResponseWriter, r *http.Request) {
  b, err := ioutil.ReadAll(r.Body)
@@ -15,9 +24,28 @@ func login(w http.ResponseWriter, r *http.Request) {
     }
    defer r.Body.Close()
 
-   fmt.Printf("%s", string(b))
+   //fmt.Printf("%s", string(b))
 
-   http.ServeFile(w, r, "./index.html")
+   	data := []byte(b)
+
+   	u := &User{}
+   	json.Unmarshal(data, u)
+    // 	fmt.Printf("struct:\n\t%#v\n\n", u)
+  	// fmt.Printf("%s", u)
+
+  fmt.Println(u.FirstName, ":", u.errorFirstName())
+  fmt.Println(u.LastName, ":", u.errorLastName())
+  fmt.Println(u.Email, ":", u.errorEmail())
+  fmt.Println(u.Password, ":", u.passwordError())
+
+
+   if u.errorFirstName() && u.errorLastName() && u.errorEmail() && u.passwordError()  {
+    fmt.Println(true)
+    } else {
+    fmt.Println(false)
+    }
+
+    http.ServeFile(w, r, "./index.html")
 }
 
 func hello(w http.ResponseWriter, r *http.Request) {
@@ -37,4 +65,34 @@ func main() {
 	if err := http.ListenAndServe(":8033", nil); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func (u *User) errorFirstName() bool {
+if len(u.FirstName) < 255 {
+return true
+}
+return false
+
+}
+
+func (u *User) errorLastName()  bool {
+ if len(u.LastName) < 255 {
+  return true
+ }
+return false
+}
+
+func (u *User) passwordError() bool {
+ if len(u.Password) < 8 || len(u.Password) > 64 {
+ return false
+ }
+return true
+}
+
+func (u User) errorEmail() bool {
+    var emailRegex = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
+    if len(u.Email) < 6 && len(u.Email) > 30 {
+        return false
+    }
+    return emailRegex.MatchString(u.Email)
 }
