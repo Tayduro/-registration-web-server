@@ -72,16 +72,8 @@ func (u *User) Validate() []ValidationErr {
 			ErrMassage: "ErrEmail",
 		})
 	}
-
 	return errors
 }
-
-//func (u *User) registrationValidation(){
-// fmt.Println(u.FirstName, ":", u.errorFirstName())
-// fmt.Println(u.LastName, ":", u.errorLastName())
-// fmt.Println(u.Email, ":", u.errorEmail())
-// fmt.Println(u.Password, ":", u.passwordError())
-//}
 
 func login(w http.ResponseWriter, r *http.Request) {
 	u := User{}
@@ -117,16 +109,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 
-	//	u.registrationValidation()
-	// 	fmt.Printf("struct:\n\t%#v\n\n", u)
-	// fmt.Printf("%s", u)
-
-	// if u.errorFirstName() && u.errorLastName() && u.errorEmail() && u.passwordError()  {
-	//  fmt.Println(true)
-	// } else {
-	// fmt.Println(false)
-	// }
-
 }
 
 func hello(w http.ResponseWriter, r *http.Request) {
@@ -143,7 +125,7 @@ func main() {
 	http.Handle("/1.jpg", http.FileServer(http.Dir("./")))
 	http.Handle("/style.css", http.FileServer(http.Dir("./")))
 
-	fmt.Printf("Starting server for testing HTTP POST...\n")
+	fmt.Printf("Starting server for testing HTTP POST....PORT:8034...\n")
 	if err := http.ListenAndServe(":8034", nil); err != nil {
 		log.Fatal(err)
 	}
