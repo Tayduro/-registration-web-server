@@ -1,5 +1,5 @@
-function fieldValidation() {
-  const url = "http://127.0.0.1:8033/login"
+async function fieldValidation() {
+  const url = "http://127.0.0.1:8034/login"
 
   const FirstName = document.querySelector('#FirstNameId')
   const LastName = document.querySelector('#LastNameId')
@@ -14,7 +14,6 @@ function fieldValidation() {
     Password: Password.value,
   }
 
-
   const response = fetch(url, {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     mode: 'cors', // no-cors, *cors, same-origin
@@ -27,7 +26,37 @@ function fieldValidation() {
     redirect: 'follow', // manual, *follow, error
     referrerPolicy: 'no-referrer', // no-referrer, *client
     body: JSON.stringify(data) // body data type must match "Content-Type" header
-  });
+  }).then((response) => {
+    return response.json();
+  })
+      .then((data) => {
+
+        function errorMessage (object){
+          for (let i = 0; i < object.length; i++){
+            console.log(i)
+           console.log(object[i].FieldValue)
+            console.log(object[i].ErrMassage)
+
+            if(object[i].FieldValue === "FirstName"){
+              document.querySelector('.firstNameErr').innerHTML = object[i].ErrMassage
+            }
+
+            if(object[i].FieldValue === "LastName"){
+              document.querySelector('.lastNameErr').innerHTML = object[i].ErrMassage
+            }
+
+            if(object[i].FieldValue === "Password"){
+              document.querySelector('.passwordErr').innerHTML = object[i].ErrMassage
+            }
+            if(object[i].FieldValue === "Email"){
+              document.querySelector('.emailErr').innerHTML = object[i].ErrMassage
+            }
+          }
+
+        }
+        errorMessage (data)
+      });
+
 }
 
 

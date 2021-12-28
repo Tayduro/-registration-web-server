@@ -48,3 +48,20 @@ body {
   background-image: url(1.jpg);
   background-color: #c7b39b;
 }
+
+.firstNameErr {
+  color: #ec0808;
+}
+
+.lastNameErr {
+  color: #ec0808;
+}
+
+.emailErr {
+  color: #ec0808;
+}
+
+.passwordErr {
+  color: #ec0808;
+}
+
