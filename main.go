@@ -27,40 +27,40 @@ func (u *User) Validate() []ValidationErr {
 	if len(u.FirstName) < 2 {
 		errors = append(errors, ValidationErr{
 			FieldValue: "FirstName",
-			ErrMassage: "ErrFirstName(2)",
+			ErrMassage: fmt.Sprintf("field %s length should be equal or longer than 2", "FirstName"),
 		})
 	}
 	if len(u.FirstName) > 64 {
 		errors = append(errors, ValidationErr{
 			FieldValue: "FirstName",
-			ErrMassage: "ErrFirstName(64)",
+			ErrMassage: fmt.Sprintf("field %s length should be less than 64", "FirstName"),
 		})
 	}
 
 	if len(u.LastName) < 2 {
 		errors = append(errors, ValidationErr{
 			FieldValue: "LastName",
-			ErrMassage: "ErrLastName(2)",
+			ErrMassage: fmt.Sprintf("field %s length should be equal or longer than 2", "LastName"),
 		})
 	}
 
 	if len(u.LastName) > 64 {
 		errors = append(errors, ValidationErr{
 			FieldValue: "LastName",
-			ErrMassage: "ErrLastName(64)",
+			ErrMassage: fmt.Sprintf("field %s length should be less than 64", "LastName"),
 		})
 	}
 	if len(u.Password) < 8 {
 		errors = append(errors, ValidationErr{
 			FieldValue: "Password",
-			ErrMassage: "ErrPasswordName(8)",
+			ErrMassage: fmt.Sprintf("field %s length should be equal or longer than 8", "Password"),
 		})
 	}
 
 	if len(u.Password) > 64 {
 		errors = append(errors, ValidationErr{
 			FieldValue: "Password",
-			ErrMassage: "ErrPasswordName(64)",
+			ErrMassage: fmt.Sprintf("field %s length should be less than 64", "Password"),
 		})
 	}
 
@@ -69,7 +69,7 @@ func (u *User) Validate() []ValidationErr {
 
 		errors = append(errors, ValidationErr{
 			FieldValue: "Email",
-			ErrMassage: "ErrEmail",
+			ErrMassage: "email failed verification",
 		})
 	}
 	return errors
@@ -106,7 +106,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		w.Write(b)
 		return
 	}
-
+	w.Write([]byte("[{}]"))
 	w.WriteHeader(http.StatusOK)
 
 }
@@ -122,8 +122,10 @@ func main() {
 	http.HandleFunc("/", hello)
 	http.HandleFunc("/login", login)
 	http.Handle("/index.js", http.FileServer(http.Dir("./")))
+	http.Handle("/confirmedRegistration.html", http.FileServer(http.Dir("./")))
 	http.Handle("/1.jpg", http.FileServer(http.Dir("./")))
 	http.Handle("/style.css", http.FileServer(http.Dir("./")))
+	http.Handle("/style2.css", http.FileServer(http.Dir("./")))
 
 	fmt.Printf("Starting server for testing HTTP POST....PORT:8034...\n")
 	if err := http.ListenAndServe(":8034", nil); err != nil {

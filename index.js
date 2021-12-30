@@ -1,5 +1,5 @@
 async function fieldValidation() {
-  const url = "http://127.0.0.1:8034/login"
+  const url = window.location.origin + "/login"
 
   const FirstName = document.querySelector('#FirstNameId')
   const LastName = document.querySelector('#LastNameId')
@@ -14,28 +14,33 @@ async function fieldValidation() {
     Password: Password.value,
   }
 
-  const response = fetch(url, {
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    mode: 'cors', // no-cors, *cors, same-origin
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'same-origin', // include, *same-origin, omit
+ fetch(url, {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json'
-      // 'Content-Type': 'application/x-www-form-urlencoded',
     },
-    redirect: 'follow', // manual, *follow, error
-    referrerPolicy: 'no-referrer', // no-referrer, *client
-    body: JSON.stringify(data) // body data type must match "Content-Type" header
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify(data)
   }).then((response) => {
+     console.log(data)
     return response.json();
   })
       .then((data) => {
 
         function errorMessage (object){
           for (let i = 0; i < object.length; i++){
-            console.log(i)
-           console.log(object[i].FieldValue)
-            console.log(object[i].ErrMassage)
+              if(!object[i].FieldValue){
+                  document.querySelector('.firstNameErr').innerHTML = "";
+                  document.querySelector('.lastNameErr').innerHTML = "";
+                  document.querySelector('.passwordErr').innerHTML = "";
+                  document.querySelector('.emailErr').innerHTML = "";
+                  window.location.href = 'confirmedRegistration.html'
+                  return
+              }
 
             if(object[i].FieldValue === "FirstName"){
               document.querySelector('.firstNameErr').innerHTML = object[i].ErrMassage
