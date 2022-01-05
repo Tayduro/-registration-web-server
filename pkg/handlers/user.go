@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"github.com/Tayduro/registration-web-server/pkg/models"
+	"github.com/Tayduro/registration-web-server/pkg/service"
 	"io/ioutil"
 	"net/http"
 )
@@ -24,7 +25,7 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = servise.Signup(&u)
+	validationErrors := service.Signup(&u)
 
 	if len(validationErrors) > 0 {
 		w.WriteHeader(http.StatusBadRequest)

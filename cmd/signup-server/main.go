@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func indexFileHendler(w http.ResponseWriter, r *http.Request) {
+func indexFileHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return
@@ -15,7 +15,7 @@ func indexFileHendler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "./index.html")
 }
 func main() {
-	http.HandleFunc("/", indexFileHendler)
+	http.HandleFunc("/", indexFileHandler)
 	http.HandleFunc("/login", handlers.SignupHandler)
 	http.Handle("/index.js", http.FileServer(http.Dir("./")))
 	http.Handle("/confirmedRegistration.html", http.FileServer(http.Dir("./")))

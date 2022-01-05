@@ -15,20 +15,20 @@ func (v *ValidationErr) Error() string {
 
 }
 
-func Length(min, max int, str string) error {
+func Length(min, max int, str string) string {
 	l := len(str)
 	if l < min || l > max {
-		return fmt.Errorf("filed should be not less that %v and not greater that %v", min, max)
+		return fmt.Sprintf("filed should be not less that %v and not greater that %v", min, max)
 	}
-	return nil
+	return ""
 }
 
-func Email(email string) error {
+func Email(email string) string {
 	var emailRegex = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 	if !emailRegex.MatchString(email) {
-		return fmt.Errorf("incorrect email format")
+		return fmt.Sprintf("incorrect email format")
 	}
-	return nil
+	return ""
 }
 
 //func Validate(u User) []ValidationErr {
