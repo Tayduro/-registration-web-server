@@ -21,22 +21,21 @@ func Signup(user *models.User) []validate.ValidationErr {
 		})
 
 	}
-	if validate.Length(models.MinNameLength, models.MaxNameLength, user.Email) != "" {
+	if validate.Email(user.Email) != "" {
 		Errors = append(Errors, validate.ValidationErr{
 			FieldValue: "Email",
-			ErrMassage: validate.Length(models.MinNameLength, models.MaxNameLength, user.Email),
+			ErrMassage: validate.Email(user.Email),
 		})
 
 	}
 
-	if validate.Length(models.MinNameLength, models.MaxNameLength, user.Password) != "" {
+	if validate.Length(8, 64, user.Password) != "" {
 		Errors = append(Errors, validate.ValidationErr{
 			FieldValue: "Password",
-			ErrMassage: validate.Length(models.MinNameLength, models.MaxNameLength, user.Password),
+			ErrMassage: validate.Length(8, 64, user.Password),
 		})
 
 	}
-	//validate.Length(models.MinNameLength, models.MaxNameLength, user.FirstName)
-	//validate.Length(models.MinNameLength, models.MaxNameLength, user.LastName)
+
 	return Errors
 }

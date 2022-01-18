@@ -2,10 +2,12 @@ package handlers
 
 import (
 	"encoding/json"
-	"github.com/Tayduro/registration-web-server/pkg/models"
-	"github.com/Tayduro/registration-web-server/pkg/service"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/Tayduro/registration-web-server/pkg/databace"
+	"github.com/Tayduro/registration-web-server/pkg/models"
+	"github.com/Tayduro/registration-web-server/pkg/service"
 )
 
 func SignupHandler(w http.ResponseWriter, r *http.Request) {
@@ -39,7 +41,9 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		w.Write(b)
 		return
 	}
-	w.Write([]byte("[{}]"))
-	w.WriteHeader(http.StatusOK)
 
+	me := &u
+       databace.DataB(me)
+	 w.Write([]byte("[]"))
+//	w.WriteHeader(http.StatusOK)
 }
