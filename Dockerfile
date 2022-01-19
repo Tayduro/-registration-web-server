@@ -3,4 +3,4 @@ WORKDIR /cmd/signup-server
 
 COPY . .
 
-CMD ["go", "run", "/code/cmd/signup-server/main.go"]
+CMD ["go", "run", "/cmd/signup-server"]
