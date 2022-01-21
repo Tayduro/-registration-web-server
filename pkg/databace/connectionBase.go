@@ -8,7 +8,7 @@ import (
 )
 
 func DataB(users * models.User) {
-	userssss := models.User{
+	user := models.User{
 		FirstName: users.FirstName,
 		LastName: users.LastName,
 		Email: users.Email,
@@ -24,11 +24,10 @@ func DataB(users * models.User) {
 
 	defer db.Close()
 
-	insert, err := db.Query("INSERT INTO users (first_name,last_name,email,password) VALUES($1, $2, $3, $4)", &userssss.FirstName, &userssss.LastName, &userssss.Email, &userssss.Password)
+	insert, err := db.Query("INSERT INTO users (first_name,last_name,email,password) VALUES($1, $2, $3, $4)", &user.FirstName, &user.LastName, &user.Email, &user.Password)
 	if err != nil{
 		panic(err)
 	}
-
 	defer insert.Close()
 
 	fmt.Println("connect to server...")

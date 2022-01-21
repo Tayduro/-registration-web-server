@@ -37,5 +37,13 @@ func Signup(user *models.User) []validate.ValidationErr {
 
 	}
 
+	if validate.UniqueEmail(user.Email) != "" {
+		Errors = append(Errors, validate.ValidationErr{
+			FieldValue: "Email2",
+			ErrMassage: validate.UniqueEmail(user.Email),
+		})
+
+	}
+
 	return Errors
 }

@@ -31,16 +31,17 @@ async function fieldValidation() {
       .then((data) => {
 
         function errorMessage (object){
+            document.querySelector('.firstNameErr').innerHTML = "";
+            document.querySelector('.lastNameErr').innerHTML = "";
+            document.querySelector('.passwordErr').innerHTML = "";
+            document.querySelector('.emailErr').innerHTML = "";
+
             if(!object[0]){
-                document.querySelector('.firstNameErr').innerHTML = "";
-                document.querySelector('.lastNameErr').innerHTML = "";
-                document.querySelector('.passwordErr').innerHTML = "";
-                document.querySelector('.emailErr').innerHTML = "";
+
                 window.location.href = 'confirmedRegistration.html'
                 return
             }
           for (let i = 0; i < object.length; i++){
-
 
             if(object[i].FieldValue === "FirstName"){
               document.querySelector('.firstNameErr').innerHTML = object[i].ErrMassage
@@ -55,6 +56,9 @@ async function fieldValidation() {
             }
             if(object[i].FieldValue === "Email"){
               document.querySelector('.emailErr').innerHTML = object[i].ErrMassage
+            }
+            if(object[i].FieldValue === "Email2"){
+                document.querySelector('.emailErr').innerHTML = object[i].ErrMassage
             }
           }
         }

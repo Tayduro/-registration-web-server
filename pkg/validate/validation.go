@@ -1,6 +1,7 @@
 package validate
 
 import (
+	"database/sql"
 	"fmt"
 	"regexp"
 )
@@ -30,3 +31,23 @@ func Email(email string) string {
 	return ""
 }
 
+func UniqueEmail (email string) string {
+
+	psqlconn := "postgres://postgres:12345@localhost:6080/users?sslmode=disable"
+
+	db, err := sql.Open("postgres", psqlconn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+
+ var dbEmail string
+	 err = db.QueryRow("SELECT email FROM users WHERE email= $1", email).Scan(&dbEmail)
+	 if dbEmail == email {
+		 return "this email is already in use"
+	 }
+
+	return ""
+}
