@@ -1,9 +1,11 @@
 package validate
 
 import (
-	"database/sql"
 	"fmt"
 	"regexp"
+
+	"github.com/Tayduro/registration-web-server/pkg/databace"
+	"github.com/jmoiron/sqlx"
 )
 
 type ValidationErr struct {
@@ -33,9 +35,19 @@ func Email(email string) string {
 
 func UniqueEmail (email string) string {
 
-	psqlconn := "postgres://postgres:12345@localhost:6080/users?sslmode=disable"
+	//psqlconn := "postgres://postgres:12345@localhost:6080/users?sslmode=disable"
+	//
+	//db, err := sqlx.Open("postgres", psqlconn)
+	//if err != nil {
+	//	panic(err)
+	//}
 
-	db, err := sql.Open("postgres", psqlconn)
+	connstring := fmt.Sprintf(
+		"host=%s port=%d dbname=%s user=%s password=%s sslmode=disable",
+		databace.Host, databace.Port, databace.Dbname, databace.User, databace.Password)
+
+	db, err := sqlx.Connect("postgres", connstring)
+
 	if err != nil {
 		panic(err)
 	}
