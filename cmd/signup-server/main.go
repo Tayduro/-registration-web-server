@@ -17,8 +17,15 @@ func indexFileHandler(w http.ResponseWriter, r *http.Request) {
 }
 func main() {
 	http.HandleFunc("/", indexFileHandler)
-	http.HandleFunc("/login", handlers.SignupHandler)
+	http.HandleFunc("/registration", handlers.RegistrationHandler)
+	http.HandleFunc("/login", handlers.SignInHandler)
+	http.HandleFunc("/send-form", handlers.CheckInformation)
+	http.HandleFunc("/log-out", handlers.LogOutHandler)
 	http.Handle("/index.js", http.FileServer(http.Dir("./assets")))
+	http.Handle("/entrance.js", http.FileServer(http.Dir("./assets")))
+	http.Handle("/profile.js", http.FileServer(http.Dir("./assets")))
+	http.Handle("/entrance.html", http.FileServer(http.Dir("./assets")))
+	http.Handle("/profile.html", http.FileServer(http.Dir("./assets")))
 	http.Handle("/confirmedRegistration.html", http.FileServer(http.Dir("./assets")))
 	http.Handle("/background.jpg", http.FileServer(http.Dir("./assets")))
 	http.Handle("/style.css", http.FileServer(http.Dir("./assets")))

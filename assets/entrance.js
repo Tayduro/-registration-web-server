@@ -1,0 +1,52 @@
+async function signIn() {
+    const url = window.location.origin + "/login"
+
+    const Email = document.querySelector('#emailId')
+    const Password = document.querySelector('#passwordId')
+    //
+
+    const data = {
+        Email: Email.value,
+        Password: Password.value,
+
+    }
+
+    fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify(data)
+    }).then((response) => {
+        return response.json();
+    })
+        .then((data) => {
+
+            localStorage.setItem('token', data)
+            console.log( data)
+            console.log( data.length)
+            if(data.length > 0){
+                window.location.href = 'profile.html'
+            }
+        });
+}
+
+
+function ready() {
+    // const buttonSignUp = document.querySelector('#send-form');
+    const buttonSignIn = document.querySelector('#sign-in');
+    // buttonSignUp.addEventListener('click', signUp);
+    buttonSignIn.addEventListener('click', signIn);
+}
+
+document.addEventListener('DOMContentLoaded', ready);
+
+
+// async function signUp () {
+//     window.location.href = 'index.html'
+// }

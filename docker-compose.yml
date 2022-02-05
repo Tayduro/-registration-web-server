@@ -13,9 +13,11 @@ services:
       - ./scripts:/docker-entrypoint-initdb.d
 #      - pg_data:/var/lib/postgresql/data
 #  ololo:
+#    ports:
+#      - "8034:8034"
 #    build:
 #      context: .
-
+#
 #volumes:
 #  pg_data:
 

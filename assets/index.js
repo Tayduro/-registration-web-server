@@ -1,5 +1,5 @@
 async function fieldValidation() {
-  const url = window.location.origin + "/login"
+  const url = window.location.origin + "/registration"
 
   const FirstName = document.querySelector('#FirstNameId')
   const LastName = document.querySelector('#LastNameId')
@@ -57,9 +57,6 @@ async function fieldValidation() {
             if(object[i].FieldValue === "Email"){
               document.querySelector('.emailErr').innerHTML = object[i].ErrMassage
             }
-            if(object[i].FieldValue === "Email2"){
-                document.querySelector('.emailErr').innerHTML = object[i].ErrMassage
-            }
           }
         }
         errorMessage (data)
@@ -68,8 +65,15 @@ async function fieldValidation() {
 
 
 function ready() {
-  const button = document.querySelector('#send-form');
-  button.addEventListener('click', fieldValidation);
+  const buttonSignUp = document.querySelector('#send-form');
+  const buttonSignIn = document.querySelector('#sign-in');
+    buttonSignIn.addEventListener('click', signIn);
+    buttonSignUp.addEventListener('click', fieldValidation);
+
 }
 
 document.addEventListener('DOMContentLoaded', ready);
+
+async function signIn() {
+    window.location.href = 'entrance.html'
+}

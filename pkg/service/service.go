@@ -2,13 +2,15 @@ package service
 
 import (
 	"crypto/sha256"
-	"github.com/Tayduro/registration-web-server/pkg/databace"
+	"fmt"
+	"github.com/jmoiron/sqlx"
+	//"gopkg.in/yaml.v2"
+	//"io/ioutil"
+	//"log"
+
+	"github.com/Tayduro/registration-web-server/pkg/config"
 	"github.com/Tayduro/registration-web-server/pkg/models"
 	"github.com/Tayduro/registration-web-server/pkg/validate"
-	"github.com/jmoiron/sqlx"
-	"math/rand"
-	//_ "time"
-	"fmt"
 )
 
 func Signup(user *models.User) []validate.ValidationErr {
@@ -27,6 +29,14 @@ func Signup(user *models.User) []validate.ValidationErr {
 		})
 
 	}
+
+	if validate.Length(models.MinNameLength, models.MaxNameLength, user.Password) != "" {
+		Errors = append(Errors, validate.ValidationErr{
+			FieldValue: "Password",
+			ErrMassage: validate.Length(8, 64, user.Password),
+		})
+
+	}
 	if validate.Email(user.Email) != "" {
 		Errors = append(Errors, validate.ValidationErr{
 			FieldValue: "Email",
@@ -34,14 +44,6 @@ func Signup(user *models.User) []validate.ValidationErr {
 		})
 
 	}
-
-	//if validate.Length(8, 64, user.Password) != "" {
-	//	Errors = append(Errors, validate.ValidationErr{
-	//		FieldValue: "Password",
-	//		ErrMassage: validate.Length(8, 64, user.Password),
-	//	})
-	//
-	//}
 
 	if validate.UniqueEmail(user.Email) != "" {
 		Errors = append(Errors, validate.ValidationErr{
@@ -51,22 +53,13 @@ func Signup(user *models.User) []validate.ValidationErr {
 
 	}
 
-	salt := RandStringRunes(5)
-	fmt.Println(salt,"salt")
-	fmt.Println(user.Password, "Password")
-	newPassword := fmt.Sprintf("%s%s",salt,user.Password)
-	fmt.Println(newPassword, "newPassword")
-	hashBits := sha256.Sum256([]byte(newPassword))
-	fmt.Println(hashBits, "hash")
-	//fmt.Printf("%x", hash)
-	hash := fmt.Sprintf("%x", hashBits)
-	fmt.Println(hash, "hash")
+	return Errors
 
+}
 
+func Login(user *models.User) string {
 
-	connstring := fmt.Sprintf(
-		"host=%s port=%d dbname=%s user=%s password=%s sslmode=disable",
-		databace.Host, databace.Port, databace.Dbname, databace.User, databace.Password)
+	connstring :=config.ConfigServer()
 
 	db, err := sqlx.Connect("postgres", connstring)
 
@@ -76,24 +69,39 @@ func Signup(user *models.User) []validate.ValidationErr {
 
 	defer db.Close()
 
-
-
-	insert, err := db.Queryx("INSERT INTO credentials (salt ,hash) VALUES($1, $2)", salt, hash)
+	var dbUserId string
+	err = db.QueryRow("SELECT user_id FROM users WHERE email= $1", user.Email).Scan(&dbUserId)
 	if err != nil{
 		panic(err)
 	}
-
-	defer insert.Close()
-
-	return Errors
-
-}
-
-func RandStringRunes(n int) string {
-	var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	var dbSalt string
+	err = db.QueryRow("SELECT salt FROM credentials WHERE user_id= $1", dbUserId).Scan(&dbSalt)
+	if err != nil{
+		panic(err)
 	}
-	return string(b)
+	password := dbSalt + user.Password
+	hashBits := sha256.Sum256([]byte(password))
+	hash := fmt.Sprintf("%x", hashBits)
+	var dbHash string
+	err = db.QueryRow("SELECT hash FROM credentials WHERE user_id= $1", dbUserId).Scan(&dbHash)
+	if err != nil{
+		panic(err)
+	}
+	var dbToken string
+	if dbHash == hash {
+
+		err = db.QueryRow("SELECT token FROM access_token WHERE user_id= $1", dbUserId).Scan(&dbToken)
+		if err != nil{
+			panic(err)
+		}
+
+	}
+	return dbToken
 }
+
+
+
+
+
+
+
