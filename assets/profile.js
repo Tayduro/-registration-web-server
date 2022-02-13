@@ -31,7 +31,7 @@ async function checkToken() {
         return response.json();
     })
         .then((data) => {
-<<<<<<< HEAD
+
             if (data === "Token is expired") {
                 alert("Token is expired")
                 window.location.href = window.location.origin
@@ -52,12 +52,7 @@ async function checkToken() {
                 }
             }
             userDataMessage (data)
-=======
 
-            console.log( data)
-
-
->>>>>>> bcf1b17145918f375e87bb4df57158a9ea8e60a3
         });
 }
 
@@ -94,21 +89,9 @@ async function logOut () {
         referrerPolicy: 'no-referrer',
         body: JSON.stringify(data)
     }).then((response) => {
-<<<<<<< HEAD
+
         window.location.href = window.location.origin
         localStorage.clear()
     })
-=======
-        return response.json();
-    })
-        .then((data) => {
 
-            console.log( data)
-
-
-        });
-
-
-    // window.location.href = 'index.html'
->>>>>>> bcf1b17145918f375e87bb4df57158a9ea8e60a3
 }

@@ -20,21 +20,12 @@ type Config struct {
 
 func NewConfig() *Config  {
 	return &Config{
-<<<<<<< HEAD
-		//Port: 0,
-		//UserName: "",
-		//Host: "",
-		//DBname:"",
-		//Password:"",
-		//Sslmode: "",
-=======
 		Port: 0,
 		UserName: "",
 		Host: "",
 		DBname:"",
 		Password:"",
 		Sslmode: "",
->>>>>>> bcf1b17145918f375e87bb4df57158a9ea8e60a3
 	}
 }
 
@@ -58,7 +49,7 @@ func ConfigServer() string {
 	return stringOfData
 }
 
-<<<<<<< HEAD
+
 func GetKey() string {
 	yfile, err := ioutil.ReadFile("./cmd/signup-server/config.yaml")
 
@@ -78,5 +69,5 @@ func GetKey() string {
 	return conf.Key
 }
 
-=======
->>>>>>> bcf1b17145918f375e87bb4df57158a9ea8e60a3
+
+
