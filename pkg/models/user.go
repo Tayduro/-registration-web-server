@@ -11,3 +11,8 @@ type User struct {
 	Email     string
 	Password  string
 }
+
+type UserData struct {
+	Field string
+	FieldValue string
+}
