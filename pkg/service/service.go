@@ -1,8 +1,13 @@
 package service
 
 import (
+	"crypto/sha256"
+	"fmt"
 	"github.com/Tayduro/registration-web-server/pkg/models"
 	"github.com/Tayduro/registration-web-server/pkg/validate"
+	"math/rand"
+	"strings"
+	"time"
 )
 
 func Signup(user *models.User) []validate.ValidationErr {
@@ -44,14 +49,29 @@ func Signup(user *models.User) []validate.ValidationErr {
 		})
 
 	}
-
 	return Errors
 
 }
 
+func CreatingHash(dbSalt string, userPassword string) string {
+	password := dbSalt + userPassword
+	hashBits := sha256.Sum256([]byte(password))
+	hash := fmt.Sprintf("%x", hashBits)
 
+	return hash
+}
 
+func RandomString() string {
+	rand.Seed(time.Now().UnixNano())
+	chars := []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ" +
+		"abcdefghijklmnopqrstuvwxyzåäö" +
+		"0123456789")
+	length := 10
+	var b strings.Builder
+	for i := 0; i < length; i++ {
+		b.WriteRune(chars[rand.Intn(len(chars))])
+	}
+	str := b.String()
 
-
-
-
+	return str
+}

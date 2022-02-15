@@ -45,8 +45,8 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 
 	me := &u
 
-       databace.DataBaseRegistration(me)
-	 w.Write([]byte("[]"))
+	databace.DataBaseRegistration(me)
+	w.Write([]byte("[]"))
 
 	//w.WriteHeader(http.StatusOK)
 
@@ -69,9 +69,7 @@ func SignInHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 	token := databace.Login(&u)
-
 
 	b, err := json.Marshal(&token)
 
@@ -89,7 +87,7 @@ func CheckInformation(w http.ResponseWriter, r *http.Request) {
 
 	user := databace.GettingUserData(head)
 	if len(user) == 0 {
-       tokenError := "Token is expired"
+		tokenError := "Token is expired"
 		b, err := json.Marshal(&tokenError)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -100,18 +98,16 @@ func CheckInformation(w http.ResponseWriter, r *http.Request) {
 	}
 
 	b, err := json.Marshal(&user)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	w.Write(b)
 	return
 
 }
 
-
-
-func LogOutHandler (w http.ResponseWriter, r *http.Request){
+func LogOutHandler(w http.ResponseWriter, r *http.Request) {
 	head := r.Header.Get("Authorization")
 
 	databace.DeleteToken(head)

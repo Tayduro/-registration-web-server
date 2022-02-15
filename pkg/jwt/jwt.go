@@ -6,12 +6,10 @@ import (
 	"time"
 )
 
-
 type Claims struct {
 	UserId string
 	jwt.StandardClaims
 }
-
 
 func NewJWT(userId string, hmacSampleSecret []byte) string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, Claims{
@@ -19,7 +17,6 @@ func NewJWT(userId string, hmacSampleSecret []byte) string {
 			ExpiresAt: time.Now().Add(time.Second * 30).Unix(),
 		},
 		UserId: userId,
-
 	})
 	tokenString, err := token.SignedString(hmacSampleSecret)
 	if err != nil {
@@ -27,8 +24,6 @@ func NewJWT(userId string, hmacSampleSecret []byte) string {
 	}
 	return tokenString
 }
-
-
 
 func ParseHmac(tokenString string, hmacSampleSecret []byte) error {
 
@@ -39,7 +34,9 @@ func ParseHmac(tokenString string, hmacSampleSecret []byte) error {
 
 		return hmacSampleSecret, nil
 	})
-
+	if err != nil {
+		panic(err)
+	}
 
 	if _, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		//fmt.Println(claims["userId"])
@@ -57,17 +54,15 @@ func ParseHmac(tokenString string, hmacSampleSecret []byte) error {
 
 func NewHmac(userId string, hmacSampleSecret []byte) string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub":  "1234567890",
-		"userId": userId,
+		"userId":    userId,
 		"ExpiresAt": fmt.Sprintln(time.Now().Add(time.Second * time.Duration(12)).Unix()),
-		"iat": fmt.Sprintln(time.Now().Unix()),
+		"iat":       fmt.Sprintln(time.Now().Unix()),
 	})
 
 	tokenString, err := token.SignedString(hmacSampleSecret)
 	if err != nil {
 		panic(err)
 	}
-
 
 	return tokenString
 }
@@ -88,9 +83,3 @@ func NewHmac(userId string, hmacSampleSecret []byte) string {
 //
 //	return ""
 //}
-
-
-
-
-
-

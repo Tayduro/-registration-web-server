@@ -2,10 +2,9 @@ package validate
 
 import (
 	"fmt"
-	"regexp"
-
-	"github.com/Tayduro/registration-web-server/pkg/databace"
+	"github.com/Tayduro/registration-web-server/pkg/config"
 	"github.com/jmoiron/sqlx"
+	"regexp"
 )
 
 type ValidationErr struct {
@@ -34,17 +33,7 @@ func Email(email string) string {
 }
 
 func UniqueEmail (email string) string {
-
-	//psqlconn := "postgres://postgres:12345@localhost:6080/users?sslmode=disable"
-	//
-	//db, err := sqlx.Open("postgres", psqlconn)
-	//if err != nil {
-	//	panic(err)
-	//}
-
-	connstring := fmt.Sprintf(
-		"host=%s port=%d dbname=%s user=%s password=%s sslmode=disable",
-		databace.Host, databace.Port, databace.Dbname, databace.User, databace.Password)
+	connstring := config.ConfigServer()
 
 	db, err := sqlx.Connect("postgres", connstring)
 
@@ -55,7 +44,7 @@ func UniqueEmail (email string) string {
 	defer db.Close()
 
 
- var dbEmail string
+var dbEmail string
 	 err = db.QueryRow("SELECT email FROM users WHERE email= $1", email).Scan(&dbEmail)
 	 if dbEmail == email {
 		 return "this email is already in use"
