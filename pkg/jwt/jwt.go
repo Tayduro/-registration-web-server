@@ -34,9 +34,7 @@ func ParseHmac(tokenString string, hmacSampleSecret []byte) error {
 
 		return hmacSampleSecret, nil
 	})
-	if err != nil {
-		panic(err)
-	}
+
 
 	if _, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		//fmt.Println(claims["userId"])
@@ -52,34 +50,3 @@ func ParseHmac(tokenString string, hmacSampleSecret []byte) error {
 
 }
 
-func NewHmac(userId string, hmacSampleSecret []byte) string {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"userId":    userId,
-		"ExpiresAt": fmt.Sprintln(time.Now().Add(time.Second * time.Duration(12)).Unix()),
-		"iat":       fmt.Sprintln(time.Now().Unix()),
-	})
-
-	tokenString, err := token.SignedString(hmacSampleSecret)
-	if err != nil {
-		panic(err)
-	}
-
-	return tokenString
-}
-
-//func checkTimeValidToken(timeToken string) string {
-//
-//	timeNow := fmt.Sprintln(time.Now().Unix())
-//
-//	if timeNow > timeToken {
-//		fmt.Println("ok")
-//		return "ok"
-//	} else {
-//		fmt.Println("Not ok")
-//	}
-//
-//	fmt.Println(timeToken, "timeToken")
-//	fmt.Println(timeNow, "timeNow")
-//
-//	return ""
-//}

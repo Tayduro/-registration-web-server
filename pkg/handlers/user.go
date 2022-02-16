@@ -112,8 +112,6 @@ func LogOutHandler(w http.ResponseWriter, r *http.Request) {
 
 	databace.DeleteToken(head)
 
-	//user := databace.GettingUserData(head)
-
 	fmt.Println(head)
 
 	databace.DeleteToken(head)

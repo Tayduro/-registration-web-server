@@ -106,11 +106,33 @@ func Login(user *models.User) string {
 	return token
 }
 
+func DeleteToken(token string) {
+	connstring := config.ConfigServer()
+
+	db, err := sqlx.Connect("postgres", connstring)
+
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	drop, err := db.Query("delete from access_token where token = $1", token)
+	if err != nil {
+		panic(err)
+	}
+	defer drop.Close()
+
+}
+
 func databaseData(token string) []models.UserData {
+
 	userData := make([]models.UserData, 0, 0)
+
 	if len(token) == 0 {
 		return userData
 	}
+
 	connstring := config.ConfigServer()
 
 	db, err := sqlx.Connect("postgres", connstring)
@@ -149,24 +171,17 @@ func databaseData(token string) []models.UserData {
 	return userData
 }
 
-func DeleteToken(token string) {
-	connstring := config.ConfigServer()
 
-	db, err := sqlx.Connect("postgres", connstring)
-
-	if err != nil {
-		panic(err)
-	}
-
-	defer db.Close()
-
-	drop, err := db.Query("delete from access_token where token = $1", token)
-	if err != nil {
-		panic(err)
-	}
-	defer drop.Close()
-
-}
+//func GettingUserData(token string) []models.UserData {
+//
+//	hmacSampleSecret := []byte(config.GetKey())
+//	if jwtToken.ParseHmac(token, hmacSampleSecret) == nil {
+//
+//		return DatabaseData(token)
+//	}
+//
+//	return DatabaseData("")
+//}
 
 func GettingUserData(token string) []models.UserData {
 
@@ -179,3 +194,66 @@ func GettingUserData(token string) []models.UserData {
 
 	return databaseData("")
 }
+
+func GetUserId(token string) string {
+
+	connstring := config.ConfigServer()
+	db, err := sqlx.Connect("postgres", connstring)
+
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
+	var dbUserId string
+	err = db.QueryRow("SELECT user_id FROM access_token WHERE token= $1", token).Scan(&dbUserId)
+	if err != nil {
+		panic(err)
+	}
+  return dbUserId
+}
+
+
+
+
+
+func GetUserFirstName(UserId string) string {
+	connstring := config.ConfigServer()
+	db, err := sqlx.Connect("postgres", connstring)
+
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
+	var dbFirstName string
+	err = db.QueryRow("SELECT first_name FROM users WHERE user_id= $1", UserId).Scan(&dbFirstName)
+	if err != nil {
+		panic(err)
+	}
+
+	return dbFirstName
+
+}
+
+func GetUserLastName(UserId string) string {
+	connstring := config.ConfigServer()
+	db, err := sqlx.Connect("postgres", connstring)
+
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
+	var dbLastName string
+	err = db.QueryRow("SELECT last_name FROM users WHERE user_id= $1", UserId).Scan(&dbLastName)
+	if err != nil {
+		panic(err)
+	}
+
+	return dbLastName
+
+}
+
+
+

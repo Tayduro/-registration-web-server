@@ -75,3 +75,31 @@ func RandomString() string {
 
 	return str
 }
+
+
+
+//func GettingUserData2(token string) []models.UserData {
+//
+//	userData := make([]models.UserData, 0, 0)
+//
+//	UserId := databace.GetUserId(token)
+//	FirstName := databace.GetUserFirstName(UserId)
+//	LastName := databace.GetUserLastName(UserId)
+//	hmacSampleSecret := []byte(config.GetKey())
+//
+//	if jwtToken.ParseHmac(token, hmacSampleSecret) == nil {
+//
+//
+//		userData = append(userData, models.UserData{
+//			Field:      "FirstName",
+//			FieldValue: FirstName,
+//		})
+//		userData = append(userData, models.UserData{
+//			Field:      "LastName",
+//			FieldValue: LastName,
+//		})
+//		return userData
+//	}
+//
+//	return userData
+//}

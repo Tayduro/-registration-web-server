@@ -51,9 +51,9 @@ func GetKey() string {
 		log.Fatal(err)
 	}
 
-	conf := *&Config{}
+	conf := &Config{}
 
-	err = yaml.Unmarshal(yfile, &conf)
+	err = yaml.Unmarshal(yfile, conf)
 
 	if err != nil {
 
