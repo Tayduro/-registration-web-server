@@ -2,8 +2,6 @@ package validate
 
 import (
 	"fmt"
-	"github.com/Tayduro/registration-web-server/pkg/config"
-	"github.com/jmoiron/sqlx"
 	"regexp"
 )
 
@@ -32,23 +30,4 @@ func Email(email string) string {
 	return ""
 }
 
-func UniqueEmail (email string) string {
-	connstring := config.ConfigServer()
 
-	db, err := sqlx.Connect("postgres", connstring)
-
-	if err != nil {
-		panic(err)
-	}
-
-	defer db.Close()
-
-
-var dbEmail string
-	 err = db.QueryRow("SELECT email FROM users WHERE email= $1", email).Scan(&dbEmail)
-	 if dbEmail == email {
-		 return "this email is already in use"
-	 }
-
-	return ""
-}

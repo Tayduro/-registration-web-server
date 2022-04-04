@@ -38,9 +38,7 @@ async function signIn() {
 
 
 function ready() {
-    // const buttonSignUp = document.querySelector('#send-form');
     const buttonSignIn = document.querySelector('#sign-in');
-    // buttonSignUp.addEventListener('click', signUp);
     buttonSignIn.addEventListener('click', signIn);
 }
 

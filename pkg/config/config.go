@@ -23,41 +23,54 @@ func NewConfig() *Config {
 	}
 }
 
-func LoadConfig() *Config {
-	config := NewConfig()
+func ReadConfig(path string) (*Config, error) {
+	//config := NewConfig()
 
-	yamlFile, err := ioutil.ReadFile("./cmd/signup-server/config.yaml")
+	config := &Config{}
+
+	yamlFile, err := ioutil.ReadFile(path)
 	if err != nil {
 		log.Fatalf("Error %v", err)
+		return nil, err
 	}
 	err = yaml.Unmarshal(yamlFile, config)
 	if err != nil {
 		log.Fatalf("Error %v", err)
-	}
-	return config
-}
-
-func ConfigServer() string {
-	config := LoadConfig()
-	stringOfData := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s", config.UserName, config.Password, config.Host, config.Port, config.DBname, config.Sslmode)
-	return stringOfData
-}
-
-func GetKey() string {
-	yfile, err := ioutil.ReadFile("./cmd/signup-server/config.yaml")
-
-	if err != nil {
-
-		log.Fatal(err)
+		return nil, err
 	}
 
-	conf := &Config{}
-
-	err = yaml.Unmarshal(yfile, conf)
-
-	if err != nil {
-
-		log.Fatal(err)
-	}
-	return conf.Key
+	return config, nil
 }
+
+func (c *Config) DBURL() string  {
+	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s", c.UserName, c.Password, c.Host, c.Port, c.DBname, c.Sslmode)
+}
+// "postgres://postgres:12345@localhoct:5432/users?sslmode=disable"
+//func ConfigServer() (string, error) {
+//	config, err := LoadConfig("./cmd/signup-server/config.yaml")
+//	if err != nil {
+//		return "", err
+//	}
+//}
+
+//func GetKey(path string) (string, error) {
+//	yfile, err := ioutil.ReadFile(path)
+//
+//	if err != nil {
+//
+//		//log.Fatal(err)
+//		return "", err
+//	}
+//
+//	//conf := &Config{}
+//	conf := NewConfig()
+//
+//	err = yaml.Unmarshal(yfile, conf)
+//
+//	if err != nil {
+//
+//		//log.Fatal(err)
+//		return "", err
+//	}
+//	return conf.Key , nil
+//}

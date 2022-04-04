@@ -1,6 +1,6 @@
-port: 6080
+port: 5432
 username: "postgres"
-host: "localhost"
+host: "postgres"
 dbname: "users"
 password: "12345"
 sslmode: "disable"

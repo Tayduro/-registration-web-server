@@ -1,22 +1,14 @@
 async function checkToken() {
     const url = window.location.origin + "/send-form"
 
-    // const Email = document.querySelector('#emailId')
-    // const Password = document.querySelector('#passwordId')
-    //
-
     const token = localStorage.getItem('token');
-    console.log(token)
 
 
     const data = {
-        // Email: Email.value,
-        // Password: Password.value,
-
     }
 
     fetch(url, {
-        method: 'POST',
+        method: 'Post',
         mode: 'cors',
         cache: 'no-cache',
         credentials: 'same-origin',
@@ -77,7 +69,7 @@ async function logOut () {
     }
 
     fetch(url, {
-        method: 'POST',
+        method: 'DELETE',
         mode: 'cors',
         cache: 'no-cache',
         credentials: 'same-origin',

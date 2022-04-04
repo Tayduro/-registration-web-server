@@ -10,16 +10,17 @@ services:
       POSTGRES_PASSWORD: 12345
       POSTGRES_DB: users
     volumes:
-      - ./scripts:/docker-entrypoint-initdb.d
-#      - pg_data:/var/lib/postgresql/data
-#  page:
-#    ports:
-#      - "8039:8039"
-#    build:
-#      context: .
-#
-#volumes:
-#  pg_data:
+      - pg_data:/var/lib/postgresql/data
+  web-server:
+    ports:
+      - "8034:8034"
+    build:
+      context: .
+    volumes:
+      - ./cmd/signup-server:/cmd/signup-server
+
+volumes:
+  pg_data:
 
 
 
