@@ -10,11 +10,16 @@ ___
 3.Use this command to start database:
 
 ````
-docker-compose up --build
+make build
+````
+4.Use this command to run migrations:
+
+````
+make migrate-up
 ````
 
-4.Open a new console window and run this command:
+5.Open a new console window and run this command:
 
 ````
-go run .\cmd\main.go
+make start
 ````

@@ -18,14 +18,7 @@ type Config struct {
 	Key      string `yaml:"key"`
 }
 
-func NewConfig() *Config {
-	return &Config{
-	}
-}
-
 func ReadConfig(path string) (*Config, error) {
-	//config := NewConfig()
-
 	config := &Config{}
 
 	yamlFile, err := ioutil.ReadFile(path)
@@ -42,35 +35,8 @@ func ReadConfig(path string) (*Config, error) {
 	return config, nil
 }
 
-func (c *Config) DBURL() string  {
+func (c *Config) DBURL() string {
+
+	fmt.Println(fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s", c.UserName, c.Password, c.Host, c.Port, c.DBname, c.Sslmode))
 	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s", c.UserName, c.Password, c.Host, c.Port, c.DBname, c.Sslmode)
 }
-// "postgres://postgres:12345@localhoct:5432/users?sslmode=disable"
-//func ConfigServer() (string, error) {
-//	config, err := LoadConfig("./cmd/signup-server/config.yaml")
-//	if err != nil {
-//		return "", err
-//	}
-//}
-
-//func GetKey(path string) (string, error) {
-//	yfile, err := ioutil.ReadFile(path)
-//
-//	if err != nil {
-//
-//		//log.Fatal(err)
-//		return "", err
-//	}
-//
-//	//conf := &Config{}
-//	conf := NewConfig()
-//
-//	err = yaml.Unmarshal(yfile, conf)
-//
-//	if err != nil {
-//
-//		//log.Fatal(err)
-//		return "", err
-//	}
-//	return conf.Key , nil
-//}

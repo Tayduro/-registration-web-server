@@ -12,18 +12,20 @@ import (
 
 func indexFileHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/" {
-		http.ServeFile(w, r, "../assets/index.html")
+		http.ServeFile(w, r, "./assets/index.html")
 		return
 	}
-	http.ServeFile(w, r, "../assets" + r.URL.Path)
+
+	http.ServeFile(w, r, "./assets"+r.URL.Path)
 
 }
 func main() {
-	cfg, err := config.ReadConfig("../cmd/signup-server/config.yaml")
+	cfg, err := config.ReadConfig("./cmd/signup-server/config.yaml")
 	if err != nil {
 		log.Fatalf("cannot read config file, err:%s", err.Error())
 
 	}
+	fmt.Printf(cfg.DBURL())
 
 	connection, err := sqlx.Connect("postgres", cfg.DBURL())
 	if err != nil {
@@ -34,7 +36,6 @@ func main() {
 	key := cfg.Key
 
 	svc := service.NewSignupService(connection, key)
-
 
 	http.HandleFunc("/", indexFileHandler)
 	http.HandleFunc("/registration", handlers.NewSignUpHandler(svc))

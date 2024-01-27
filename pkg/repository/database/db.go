@@ -11,10 +11,10 @@ type UsersRepository struct {
 }
 
 func NewUsersRepository(db sqlx.DB) *UsersRepository {
-	return  &UsersRepository{db: db}
+	return &UsersRepository{db: db}
 }
 
-func (u *UsersRepository)DataBaseRegistration(users *models.User) (string, error) {
+func (u *UsersRepository) DataBaseRegistration(users *models.User) (string, error) {
 	currentUser := models.User{
 		FirstName: users.FirstName,
 		LastName:  users.LastName,
@@ -31,8 +31,7 @@ func (u *UsersRepository)DataBaseRegistration(users *models.User) (string, error
 	return userId, nil
 }
 
-
-func (u *UsersRepository)InsertCredentials(UserId string, salt string, hash string) error {
+func (u *UsersRepository) InsertCredentials(UserId string, salt string, hash string) error {
 	insert, err := u.db.Queryx("INSERT INTO credentials (user_id,salt ,hash) VALUES($1, $2, $3)", UserId, salt, hash)
 	if err != nil {
 		return err
@@ -43,37 +42,7 @@ func (u *UsersRepository)InsertCredentials(UserId string, salt string, hash stri
 	return nil
 }
 
-
-
-//func (u *UsersRepository)GetUserIdByEmail(user *models.User) (string, error) {
-//	var dbUserId []string
-//	err := u.db.Select(&dbUserId,"SELECT user_id FROM users WHERE email= $1", user.Email)
-//	if err != nil {
-//		return "", err
-//	}
-//    return dbUserId[0], nil
-//}
-//
-//func (u *UsersRepository)GetSalt(dbUserId string) (string, error) {
-//	var dbSalt string
-//	err := u.db.QueryRowx("SELECT salt FROM credentials WHERE user_id= $1", dbUserId).Scan(&dbSalt)
-//	if err != nil {
-//		return "", err
-//	}
-//	return dbSalt, nil
-//}
-//
-//
-//func (u *UsersRepository)GetHash(dbUserId string) (string, error) {
-//	var dbHash string
-//	err := u.db.QueryRowx("SELECT hash FROM credentials WHERE user_id= $1", dbUserId).Scan(&dbHash)
-//	if err != nil {
-//		return "", err
-//	}
-//	return dbHash, nil
-//}
-
-func (u *UsersRepository)InsertToken(dbUserId string, token string)  error {
+func (u *UsersRepository) InsertToken(dbUserId string, token string) error {
 	insert, err := u.db.Queryx("INSERT INTO access_token (user_id,token) VALUES($1, $2)", dbUserId, token)
 	if err != nil {
 		return err
@@ -83,8 +52,7 @@ func (u *UsersRepository)InsertToken(dbUserId string, token string)  error {
 	return nil
 }
 
-
-func (u *UsersRepository)DeleteToken(token string) error {
+func (u *UsersRepository) DeleteToken(token string) error {
 
 	drop, err := u.db.Queryx("delete from access_token where token = $1", token)
 	if err != nil {
@@ -96,7 +64,7 @@ func (u *UsersRepository)DeleteToken(token string) error {
 	return nil
 }
 
-func (u *UsersRepository)GetEmailIfAvailable(email string) (string, error) {
+func (u *UsersRepository) GetEmailIfAvailable(email string) (string, error) {
 	var dbEmail string
 
 	err := u.db.QueryRowx("SELECT email FROM users WHERE email= $1", email).Scan(&dbEmail)
@@ -106,26 +74,23 @@ func (u *UsersRepository)GetEmailIfAvailable(email string) (string, error) {
 	return dbEmail, nil
 }
 
-
-
-func (u *UsersRepository)GetUserByToken(token string) (models.Person, error) {
+func (u *UsersRepository) GetUserByToken(token string) (models.Person, error) {
 	p := models.Person{}
 
 	err := u.db.Get(&p, "SELECT users.first_name, last_name FROM users left join access_token a on users.user_id = a.user_id where a.token = $1", token)
 	if err != nil {
-		return p,nil
+		return p, nil
 	}
 	return p, nil
 
 }
 
-func (u *UsersRepository)GetCredentialsByEmail(email string) (models.Credentials, error) {
+func (u *UsersRepository) GetCredentialsByEmail(email string) (models.Credentials, error) {
 	p := models.Credentials{}
 
 	err := u.db.Get(&p, "SELECT credentials.user_id, salt, hash FROM credentials left join users a on credentials.user_id = a.user_id where a.email = $1", email)
 	if err != nil {
-		return p,nil
+		return p, nil
 	}
 	return p, nil
 }
-

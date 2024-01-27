@@ -35,13 +35,7 @@ func ParseHmac(tokenString string, hmacSampleSecret []byte) error {
 		return hmacSampleSecret, nil
 	})
 
-
 	if _, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		//fmt.Println(claims["userId"])
-		//result := fmt.Sprintln(claims["ExpiresAt"])
-		//checkTimeValidToken(result)
-
-		//fmt.Println(result)
 		return nil
 	} else {
 		fmt.Println(err)
@@ -49,4 +43,3 @@ func ParseHmac(tokenString string, hmacSampleSecret []byte) error {
 	}
 
 }
-
